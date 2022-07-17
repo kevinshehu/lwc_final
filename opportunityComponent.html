@@ -1,0 +1,86 @@
+<template>
+    <lightning-card title="Opportunities" icon-name="standard:opportunity" >
+        <br/>
+        {name}
+        <br/>
+        <!-- lightning button for open custom modal window -->
+        <lightning-button variant="brand"
+            label="Create new task"
+            title="Create new task"
+            onclick={customShowModalPopup}
+            class="slds-m-right_x-small">
+        </lightning-button>
+        
+        <div>
+            <template if:true={data}>
+                <lightning-datatable data={data}
+                                     columns={columns}
+                                     key-field="id"
+                                     sorted-by={sortBy}
+                                     sorted-direction={sortDirection}
+                                     onsort={doSorting}></lightning-datatable>
+            </template>
+        </div>
+    </lightning-card>
+
+    <!-- modal start -->        
+    <template if:true={customFormModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-m-around_x-large">
+            <div class="slds-modal__container">
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={customHideModalPopup}>
+                        <lightning-icon icon-name="utility:close"
+                        alternative-text="close"
+                        variant="inverse"
+                        size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium slds-hyphenate">Create new Task</h2>
+                </header>
+
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium">
+                    <!-- subject input -->
+                    <lightning-input type="text" name="subject" value={subjectValue} onchange={subjectHandleChange} label="Subject" required></lightning-input>
+
+                     <!-- status input  -->
+                    <div>
+                        <div class="slds-p-around_xx-small">
+                            <lightning-combobox name="status" label="Status" value={statusValue} placeholder="--None--" options={statusOptions} onchange={statusHandleChange}></lightning-combobox>
+                        </div>
+                        
+                        <div class="slds-p-around_xx-small">
+                            <template for:each={statusAllValues} for:item="temp">
+                                <lightning-pill key={temp} label={temp} name={temp}></lightning-pill>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- priority input  -->
+                    <div>
+                        <div class="slds-p-around_xx-small">
+                            <lightning-combobox name="priority" label="Priority" value={priorityValue} placeholder="--None--" options={priorityOptions} onchange={priorityHandleChange}></lightning-combobox>
+                        </div>
+                        
+                        <div class="slds-p-around_xx-small">
+                            <template for:each={priorityAllValues} for:item="temp">
+                                <lightning-pill key={temp} label={temp} name={temp}></lightning-pill>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button--destructive" onclick={customHideModalPopup}>Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={createRecord}>Save</button>
+                </footer>
+                </div>
+            </div>
+        </section>
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end --> 
+</template>
